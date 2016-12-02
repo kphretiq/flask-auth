@@ -3,7 +3,7 @@ Base module of the extension. Contains basic functions, the Auth object and the
 AuthUser base class.
 """
 
-import time, hashlib, datetime
+import time, hashlib, datetime, sys
 from functools import partial
 from flask import session, abort, current_app, redirect, url_for
 
@@ -126,6 +126,8 @@ class AuthUser(object):
 def encrypt(password, salt=None, hash_algorithm=None):
     """Encrypts a password based on the hashing algorithm."""
     to_encrypt = password
+    if sys.version_info[0] > 2:
+        to_encrypt = to_encrypt.encode("utf-8")
     if salt is not None:
         to_encrypt += salt
     if hash_algorithm is not None:
